@@ -7,44 +7,15 @@ Projeto acadêmico - Sistema de gerenciamento de reservas e atividades para inst
 
 **Disciplina**: SCC0641 – Laboratório de Bases de Dados
 
-## 📑 Sumário
+## Summary
 
-- [db_project](#db_project)
-  - [📑 Sumário](#-sumário)
-  - [📋 Sobre o Projeto](#-sobre-o-projeto)
-  - [🏗️ Estrutura do Projeto](#️-estrutura-do-projeto)
-  - [📦 Pré-requisitos](#-pré-requisitos)
-  - [🚀 Como Rodar](#-como-rodar)
-    - [Método 1: Docker Compose (Recomendado)](#método-1-docker-compose-recomendado)
-      - [1. Configurar variáveis de ambiente](#1-configurar-variáveis-de-ambiente)
-      - [2. Subir os serviços](#2-subir-os-serviços)
-      - [3. Acessar as aplicações](#3-acessar-as-aplicações)
-      - [4. Ver logs](#4-ver-logs)
-      - [5. Parar os serviços](#5-parar-os-serviços)
-    - [Método 2: Desenvolvimento Local](#método-2-desenvolvimento-local)
-      - [Backend (Flask)](#backend-flask)
-      - [Frontend (Next.js)](#frontend-nextjs)
-  - [🗄️ Banco de Dados](#️-banco-de-dados)
-    - [Popular o banco de dados](#popular-o-banco-de-dados)
-      - [Opção 1: Automática (Docker)](#opção-1-automática-docker)
-      - [Opção 2: Manual](#opção-2-manual)
-    - [Reverter/limpar o banco](#reverterlimpar-o-banco)
-    - [Acessar o PostgreSQL via psql](#acessar-o-postgresql-via-psql)
-  - [👤 Logins de Teste](#-logins-de-teste)
-  - [📝 Scripts Úteis](#-scripts-úteis)
-    - [Backend](#backend)
-    - [Frontend](#frontend)
-  - [🔧 Desenvolvimento](#-desenvolvimento)
-    - [Estrutura do Backend](#estrutura-do-backend)
-    - [Estrutura do Frontend](#estrutura-do-frontend)
-  - [🐛 Troubleshooting](#-troubleshooting)
-    - [Erro de conexão com o banco](#erro-de-conexão-com-o-banco)
-    - [Erro ao popular o banco](#erro-ao-popular-o-banco)
-    - [Porta já em uso](#porta-já-em-uso)
-  - [📚 Documentação Adicional](#-documentação-adicional)
-  - [📄 Sobre](#-sobre)
+- Archived academic full-stack project for managing reservations, activities, users, staff, resources, reports, and sports-facility workflows.
+- Solves the SCC0641 database-lab assignment by combining a PostgreSQL relational model, Flask backend, Next.js frontend, Docker Compose orchestration, and synthetic data generation.
+- Main stack: PostgreSQL 17, Flask, psycopg2, Flask-Cors, Next.js 16, React 19, TypeScript, Tailwind CSS, TanStack Query/Table, Zustand, Recharts, and Docker Compose.
+- Current status: archived coursework reference; useful for portfolio review and database-first project explanation, not an actively maintained product.
+- Technical value: demonstrates SQL schema/scripts, generated sample data, role-based UI surfaces, and containerized full-stack local setup.
 
-## 📋 Sobre o Projeto
+## Overview
 
 Aplicação full-stack para gerenciamento de reservas e atividades em instalações esportivas, desenvolvida com:
 
@@ -53,35 +24,37 @@ Aplicação full-stack para gerenciamento de reservas e atividades em instalaç�
 - **Banco de Dados**: PostgreSQL 17
 - **Orquestração**: Docker Compose
 
-## 🏗️ Estrutura do Projeto
+Este projeto foi desenvolvido como parte do Projeto Final (PF) da disciplina SCC0641 – Laboratório de Bases de Dados.
 
-```text
-db_project/
-├── client/          # Frontend Next.js
-│   └── Dockerfile.dev  # Dockerfile para desenvolvimento do Next.js
-├── server/          # Backend Flask
-│   ├── app/         # Aplicação Flask (rotas, serviços)
-│   ├── data_generators/  # Geradores de dados sintéticos
-│   ├── docker/      # Configurações Docker do Flask
-│   │   └── Dockerfile  # Dockerfile para o Flask
-│   └── sql/         # Scripts SQL (migrações, views, funções)
-├── docs/            # Documentação do projeto
-└── docker-compose.yml
-```
+**Autores**:
 
-## 📦 Pré-requisitos
+- Breno Rodrigues - 11734142
+- Erick Barcelos - 11345562
+- Gabriel Henrique dos Santos - 13783972
+- Lourençco Roselino - 11796805
+- Nelson Luiz - 9793502
+
+## Tech Stack
+
+- PostgreSQL 17 for the relational model, SQL functions, views, and generated data.
+- Flask with psycopg2 and Flask-Cors for the REST API.
+- Next.js 16, React 19, TypeScript, Tailwind CSS, TanStack Query/Table, Zustand, and Recharts for the frontend.
+- Docker Compose for the full local stack.
+- Shell scripts under `server/scripts/` for database population and downgrade flows.
+
+## Getting Started
+
+### Requirements
 
 - Docker e Docker Compose instalados
 - Node.js 20+ e pnpm (para desenvolvimento local do frontend)
 - Python 3.12+ (para desenvolvimento local do backend)
 
-## 🚀 Como Rodar
-
-### Método 1: Docker Compose (Recomendado)
+### Running Locally
 
 Este método sobe toda a aplicação (PostgreSQL, Flask e Next.js) em containers Docker.
 
-#### 1. Configurar variáveis de ambiente
+**1. Configurar variáveis de ambiente**
 
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
@@ -119,7 +92,7 @@ NEXTJS_PORT=3000
 POPULATE_DB=true
 ```
 
-#### 2. Subir os serviços
+**2. Subir os serviços**
 
 ```bash
 docker compose up -d
@@ -132,13 +105,13 @@ Isso irá:
 - Construir e iniciar a aplicação Next.js
 - Popular o banco de dados automaticamente (se `POPULATE_DB=true`)
 
-#### 3. Acessar as aplicações
+**3. Acessar as aplicações**
 
 - **Frontend**: <http://localhost:3000>
 - **Backend API**: <http://localhost:5050>
 - **PostgreSQL**: localhost:5432
 
-#### 4. Ver logs
+**4. Ver logs**
 
 ```bash
 # Todos os serviços
@@ -150,15 +123,13 @@ docker compose logs -f nextjs_app
 docker compose logs -f postgres
 ```
 
-#### 5. Parar os serviços
+**5. Parar os serviços**
 
 ```bash
 docker compose down
 ```
 
-### Método 2: Desenvolvimento Local
-
-#### Backend (Flask)
+**Backend (Flask)**
 
 1. **Instalar dependências Python**
 
@@ -182,7 +153,7 @@ Certifique-se de que o arquivo `.env` está configurado corretamente (veja Méto
 flask run --host=0.0.0.0 --port=5050 --reload
 ```
 
-#### Frontend (Next.js)
+**Frontend (Next.js)**
 
 1. **Instalar dependências**
 
@@ -203,15 +174,15 @@ pnpm dev
 
 O frontend estará disponível em <http://localhost:3000>
 
-## 🗄️ Banco de Dados
+## Usage
 
-### Popular o banco de dados
+**Popular o banco de dados**
 
-#### Opção 1: Automática (Docker)
+**Opção 1: Automática (Docker)**
 
 Se `POPULATE_DB=true` no `.env`, o banco será populado automaticamente ao iniciar o container Flask.
 
-#### Opção 2: Manual
+**Opção 2: Manual**
 
 ```bash
 # Dentro do container ou ambiente Python ativado
@@ -224,7 +195,7 @@ Este script:
 - Aplica as migrações de schema
 - Popula todas as tabelas com dados sintéticos
 
-### Reverter/limpar o banco
+**Reverter/limpar o banco**
 
 ```bash
 cd server
@@ -233,7 +204,7 @@ cd server
 
 Isso executará os scripts de downgrade na ordem inversa, limpando todas as tabelas e o schema.
 
-### Acessar o PostgreSQL via psql
+**Acessar o PostgreSQL via psql**
 
 ```bash
 # Via Docker
@@ -245,8 +216,6 @@ psql
 docker exec -it postgres17 psql -U postgres -d public
 ```
 
-## 👤 Logins de Teste
-
 Consulte o arquivo `LOGINS.md` para informações sobre usuários de teste e senhas padrão.
 
 **Resumo rápido:**
@@ -256,23 +225,43 @@ Consulte o arquivo `LOGINS.md` para informações sobre usuários de teste e sen
 - **Funcionário**: `funcionario@usp.br` / `senha123`
 - **Interno**: `interno@usp.br` / `senha123`
 
-## 📝 Scripts Úteis
-
-### Backend
+**Backend**
 
 - `./scripts/populate_db.sh` - Popula o banco de dados
 - `./scripts/downgrade_db.sh` - Reverte/limpa o banco de dados
 
-### Frontend
+**Frontend**
 
 - `pnpm dev` - Inicia servidor de desenvolvimento
 - `pnpm build` - Build de produção
 - `pnpm start` - Inicia servidor de produção
 - `pnpm lint` - Executa o linter
 
-## 🔧 Desenvolvimento
+## Project Structure
 
-### Estrutura do Backend
+```text
+db_project/
+├── client/          # Frontend Next.js
+│   └── Dockerfile.dev  # Dockerfile para desenvolvimento do Next.js
+├── server/          # Backend Flask
+│   ├── app/         # Aplicação Flask (rotas, serviços)
+│   ├── data_generators/  # Geradores de dados sintéticos
+│   ├── docker/      # Configurações Docker do Flask
+│   │   └── Dockerfile  # Dockerfile para o Flask
+│   └── sql/         # Scripts SQL (migrações, views, funções)
+├── docs/            # Documentação do projeto
+└── docker-compose.yml
+```
+
+Additional documentation:
+
+- [`relatorio.md`](relatorio.md) - Relatório técnico completo do projeto (Projeto Final - Bases de Dados)
+- [`LOGINS.md`](LOGINS.md) - Informações sobre logins de teste
+- `docs/` - Documentação técnica e entregas
+
+## Architecture
+
+**Estrutura do Backend**
 
 - `app/routes/` - Rotas da API REST
 - `app/services/` - Lógica de negócio
@@ -282,51 +271,37 @@ Consulte o arquivo `LOGINS.md` para informações sobre usuários de teste e sen
 - `sql/functions/` - Funções SQL
 - `sql/views.sql` - Views do banco
 
-### Estrutura do Frontend
+**Estrutura do Frontend**
 
 - `app/` - Rotas e páginas (App Router do Next.js)
 - `components/` - Componentes React
 - `hooks/` - Custom hooks
 - `lib/` - Utilitários e configurações
 
-## 🐛 Troubleshooting
+## Current Status
 
-### Erro de conexão com o banco
+This project is archived as a coursework and portfolio reference. The Docker Compose flow, SQL scripts, Flask API, and Next.js frontend remain documented for study and local reproduction.
+
+## Known Limitations
+
+**Erro de conexão com o banco**
 
 - Verifique se o PostgreSQL está rodando: `docker compose ps`
 - Verifique as variáveis de ambiente no `.env`
 - Verifique os logs: `docker compose logs postgres`
 
-### Erro ao popular o banco
+**Erro ao popular o banco**
 
 - Verifique se o PostgreSQL está saudável: `docker compose ps`
 - Verifique os logs do Flask: `docker compose logs flask_app`
 - Tente popular manualmente: `./scripts/populate_db.sh`
 
-### Porta já em uso
+**Porta já em uso**
 
 - Altere as portas no arquivo `.env` (ex: `FLASK_PORT=5051`, `FLASK_RUN_PORT=5051`, `NEXTJS_PORT=3001`)
 - Ou pare o processo que está usando a porta
 
-### Erro de CORS no desenvolvimento local
+**Erro de CORS no desenvolvimento local**
 
 - Certifique-se de que `CORS_ORIGINS` está configurado no `.env` com a URL do frontend (ex: `CORS_ORIGINS=http://localhost:3000`)
 - Verifique se `NEXT_PUBLIC_API_URL` está apontando para a URL correta do backend
-
-## 📚 Documentação Adicional
-
-- [`relatorio.md`](relatorio.md) - Relatório técnico completo do projeto (Projeto Final - Bases de Dados)
-- [`LOGINS.md`](LOGINS.md) - Informações sobre logins de teste
-- `docs/` - Documentação técnica e entregas
-
-## 📄 Sobre
-
-Este projeto foi desenvolvido como parte do Projeto Final (PF) da disciplina SCC0641 – Laboratório de Bases de Dados.
-
-**Autores**:
-
-- Breno Rodrigues - 11734142
-- Erick Barcelos - 11345562
-- Gabriel Henrique dos Santos - 13783972
-- Lourençco Roselino - 11796805
-- Nelson Luiz - 9793502
