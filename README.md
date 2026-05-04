@@ -1,307 +1,269 @@
-# db_project
+# CEFER Management
 
-> **Status:** Archived
-> This academic project is kept for coursework reference, historical context, and portfolio review.
+> Status: archived academic coursework reference.
 
-Projeto acadêmico - Sistema de gerenciamento de reservas e atividades para instalações esportivas.
+CEFER Management is a full-stack academic system for managing sports-facility reservations, activities, equipment, users, external invitations, and reporting workflows for the CEFER context at USP. It was built for the SCC0641 database laboratory coursework and is preserved as a database-first portfolio and study project, not as an actively maintained production product.
 
-**Disciplina**: SCC0641 – Laboratório de Bases de Dados
+The project combines a PostgreSQL relational model, a Flask API, a Next.js client, SQL functions/views/triggers, synthetic data generators, and Docker Compose orchestration.
 
-## Summary
+## What This Project Solves
 
-- Archived academic full-stack project for managing reservations, activities, users, staff, resources, reports, and sports-facility workflows.
-- Solves the SCC0641 database-lab assignment by combining a PostgreSQL relational model, Flask backend, Next.js frontend, Docker Compose orchestration, and synthetic data generation.
-- Main stack: PostgreSQL 17, Flask, psycopg2, Flask-Cors, Next.js 16, React 19, TypeScript, Tailwind CSS, TanStack Query/Table, Zustand, Recharts, and Docker Compose.
-- Current status: archived coursework reference; useful for portfolio review and database-first project explanation, not an actively maintained product.
-- Technical value: demonstrates SQL schema/scripts, generated sample data, role-based UI surfaces, and containerized full-stack local setup.
+The system models a sports center where different user profiles need different workflows:
 
-## Overview
+- Internal USP users can view available activities, enroll in activities, reserve installations, reserve equipment, and invite external guests.
+- Staff users can manage activities, participants, equipment reservations, and installation reservations.
+- Administrators can manage users, installations, equipment, events, extension groups, activities, reservations, and registration requests.
+- External users can authenticate through invitation tokens and accept or reject participation invitations.
+- Reports and database views expose analytical summaries for reservations, activities, equipment, installations, and participation.
 
-Aplicação full-stack para gerenciamento de reservas e atividades em instalações esportivas, desenvolvida com:
+## Main Features
 
-- **Backend**: Flask (Python) - API REST
-- **Frontend**: Next.js 16 (React 19 + TypeScript)
-- **Banco de Dados**: PostgreSQL 17
-- **Orquestração**: Docker Compose
+- Role-based web UI for administrators, staff, internal users, and external invitees.
+- Flask API grouped by domain under `server/app/routes/`.
+- PostgreSQL schema, indexes, views, PL/pgSQL functions, and triggers under `server/sql/`.
+- Synthetic data generation under `server/data_generators/`.
+- Session-based authentication for internal users.
+- Token-based external invite flow.
+- Docker Compose setup for PostgreSQL, Flask, and Next.js.
+- Academic report artifacts preserved under `relatorio.md` and `docs/entrega_final/`.
 
-Este projeto foi desenvolvido como parte do Projeto Final (PF) da disciplina SCC0641 – Laboratório de Bases de Dados.
+## Technology Stack
 
-**Autores**:
+| Area | Technology |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| UI/data | Radix UI primitives, TanStack Query, TanStack Table, Zustand, Recharts, Lucide React |
+| Backend | Python 3.12, Flask, Flask-Cors, psycopg2 |
+| Database | PostgreSQL 17, SQL scripts, PL/pgSQL functions, triggers, views, indexes |
+| Local orchestration | Docker Compose |
+| Data generation | Python scripts with Faker |
 
-- Breno Rodrigues - 11734142
-- Erick Barcelos - 11345562
-- Gabriel Henrique dos Santos - 13783972
-- Lourençco Roselino - 11796805
-- Nelson Luiz - 9793502
+## Project Structure
 
-## Tech Stack
-
-- PostgreSQL 17 for the relational model, SQL functions, views, and generated data.
-- Flask with psycopg2 and Flask-Cors for the REST API.
-- Next.js 16, React 19, TypeScript, Tailwind CSS, TanStack Query/Table, Zustand, and Recharts for the frontend.
-- Docker Compose for the full local stack.
-- Shell scripts under `server/scripts/` for database population and downgrade flows.
-
-## Getting Started
-
-### Requirements
-
-- Docker e Docker Compose instalados
-- Node.js 20+ e pnpm (para desenvolvimento local do frontend)
-- Python 3.12+ (para desenvolvimento local do backend)
-
-### Running Locally
-
-Este método sobe toda a aplicação (PostgreSQL, Flask e Next.js) em containers Docker.
-
-**1. Configurar variáveis de ambiente**
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```env
-# PostgreSQL
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=public
-POSTGRES_PORT=5432
-
-# Database Connection (Flask)
-DB_HOST=postgres
-DB_PORT=5432
-DB_NAME=public
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_SCHEMA=              # Opcional: schema específico do PostgreSQL
-
-# Flask
-FLASK_SECRET_KEY=your-secret-key-here
-FLASK_DEBUG=true
-FLASK_RUN_PORT=5050     # Porta interna do Flask dentro do container
-FLASK_RUN_HOST=0.0.0.0
-FLASK_PORT=5050         # Porta de mapeamento Docker (host:container)
-
-# CORS (opcional - necessário apenas para desenvolvimento local)
-CORS_ORIGINS=http://localhost:3000  # Origens permitidas separadas por vírgula
-
-# Next.js
-NEXT_PUBLIC_API_URL=http://localhost:5050
-NODE_ENV=development
-NEXTJS_PORT=3000
-
-# População automática do banco (opcional)
-POPULATE_DB=true
+```text
+cefer/
+|-- client/                  # Next.js App Router frontend
+|   |-- app/                 # Role-based routes and pages
+|   |-- components/          # UI primitives and domain components
+|   |-- hooks/               # TanStack Query hooks and API wrappers
+|   `-- lib/                 # API client, auth state, query provider, utilities
+|-- server/                  # Flask and PostgreSQL backend
+|   |-- app/                 # App factory, routes, services, database session
+|   |-- data_generators/     # Synthetic data population modules
+|   |-- docker/              # Flask Dockerfile and entrypoint
+|   |-- scripts/             # Database population and downgrade helpers
+|   `-- sql/                 # Schema, SQL queries, views, indexes, functions
+|-- docs/                    # Operational documentation and course artifacts
+|-- LOGINS.md                # Seeded development credentials
+|-- relatorio.md             # Historical academic report artifact
+|-- docker-compose.yml       # Local full-stack orchestration
+`-- .env.example             # Environment variable template
 ```
 
-**2. Subir os serviços**
+## Documentation Map
+
+- [Documentation index](docs/index.md)
+- [Project overview](docs/overview.md)
+- [Architecture](docs/architecture.md)
+- [Setup](docs/setup.md)
+- [Development guide](docs/development.md)
+- [API reference](docs/api.md)
+- [Database guide](docs/database.md)
+- [Deployment notes](docs/deployment.md)
+- [Security notes](docs/security.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Client README](client/README.md)
+- [Server README](server/README.md)
+- [Seeded logins](LOGINS.md)
+
+## Prerequisites
+
+For the Docker Compose workflow:
+
+- Docker
+- Docker Compose
+
+For manual local development:
+
+- Node.js 20+
+- pnpm
+- Python 3.12+
+- PostgreSQL 17 or access to the Compose `postgres` service
+
+## Environment Configuration
+
+Copy `.env.example` to `.env` and adjust values as needed:
+
+```bash
+cp .env.example .env
+```
+
+Important variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT` | PostgreSQL container settings |
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_SCHEMA` | Flask database connection settings |
+| `FLASK_SECRET_KEY` | Flask session signing secret |
+| `FLASK_DEBUG`, `FLASK_RUN_HOST`, `FLASK_RUN_PORT`, `FLASK_PORT` | Flask runtime and exposed port settings |
+| `NEXT_PUBLIC_API_URL` | Browser-visible base URL for the Flask API |
+| `NEXTJS_PORT`, `NODE_ENV` | Next.js runtime settings |
+| `CORS_ORIGINS` | Comma-separated allowed browser origins |
+| `POPULATE_DB` | Enables automatic database population in the Flask container |
+
+Use a strong `FLASK_SECRET_KEY` outside local coursework testing. Do not publish real database credentials.
+
+## Running With Docker Compose
+
+The repository defines three services in `docker-compose.yml`:
+
+- `postgres`: PostgreSQL 17 with persisted data under `server/pgdata`.
+- `flask_app`: Flask API built from `server/docker/Dockerfile`.
+- `nextjs_app`: Next.js development server built from `client/Dockerfile.dev`.
+
+Start the stack:
 
 ```bash
 docker compose up -d
 ```
 
-Isso irá:
+Expected local URLs with default `.env.example` values:
 
-- Iniciar o PostgreSQL 17
-- Construir e iniciar a aplicação Flask
-- Construir e iniciar a aplicação Next.js
-- Popular o banco de dados automaticamente (se `POPULATE_DB=true`)
+- Frontend: <http://localhost:3000>
+- Flask API: <http://localhost:5050>
+- PostgreSQL: `localhost:5432`
 
-**3. Acessar as aplicações**
-
-- **Frontend**: <http://localhost:3000>
-- **Backend API**: <http://localhost:5050>
-- **PostgreSQL**: localhost:5432
-
-**4. Ver logs**
-
-```bash
-# Todos os serviços
-docker compose logs -f
-
-# Apenas um serviço
-docker compose logs -f flask_app
-docker compose logs -f nextjs_app
-docker compose logs -f postgres
-```
-
-**5. Parar os serviços**
+Stop the stack:
 
 ```bash
 docker compose down
 ```
 
-**Backend (Flask)**
-
-1. **Instalar dependências Python**
+Inspect logs:
 
 ```bash
-cd server
-python3 -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
-pip install -r requirements.txt
+docker compose logs -f
+docker compose logs -f flask_app
+docker compose logs -f nextjs_app
+docker compose logs -f postgres
 ```
 
-2. **Configurar variáveis de ambiente**
+## Manual Development Notes
 
-Certifique-se de que o arquivo `.env` está configurado corretamente (veja Método 1).
-
-**Importante**: Para desenvolvimento local, configure `CORS_ORIGINS` no `.env` com a URL do frontend (ex: `CORS_ORIGINS=http://localhost:3000`). No Docker, isso não é necessário pois o CORS é configurado automaticamente.
-
-3. **Rodar o servidor Flask**
-
-```bash
-# Com o PostgreSQL rodando (via Docker Compose ou localmente)
-flask run --host=0.0.0.0 --port=5050 --reload
-```
-
-**Frontend (Next.js)**
-
-1. **Instalar dependências**
+Frontend:
 
 ```bash
 cd client
 pnpm install
-```
-
-2. **Configurar variáveis de ambiente**
-
-Certifique-se de que `NEXT_PUBLIC_API_URL` está configurado no `.env` apontando para a URL do backend Flask.
-
-3. **Rodar o servidor de desenvolvimento**
-
-```bash
 pnpm dev
 ```
 
-O frontend estará disponível em <http://localhost:3000>
-
-## Usage
-
-**Popular o banco de dados**
-
-**Opção 1: Automática (Docker)**
-
-Se `POPULATE_DB=true` no `.env`, o banco será populado automaticamente ao iniciar o container Flask.
-
-**Opção 2: Manual**
+Backend:
 
 ```bash
-# Dentro do container ou ambiente Python ativado
 cd server
-./scripts/populate_db.sh
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+flask run --host=0.0.0.0 --port=5050 --reload
 ```
 
-Este script:
+The Flask backend expects database variables from `.env`. For browser access, `NEXT_PUBLIC_API_URL` must point to the Flask API and `CORS_ORIGINS` must include the frontend origin.
 
-- Aplica as migrações de schema
-- Popula todas as tabelas com dados sintéticos
+## Database Population
 
-**Reverter/limpar o banco**
+The database is database-first. Schema and application data are managed by SQL and Python generator assets:
+
+- `server/sql/upgrade_schema.sql`: main relational schema.
+- `server/sql/functions/`: PL/pgSQL auth, admin, staff, internal, and trigger functions.
+- `server/sql/views.sql`: reporting and table-view surfaces.
+- `server/sql/indexes.sql`: explicit indexes.
+- `server/data_generators/populate.py`: coordinated synthetic data population.
+- `server/data_generators/downgrade.py`: downgrade/cleanup path.
+
+When `POPULATE_DB=true`, the Flask container entrypoint checks whether the database is populated and runs the generator flow if needed.
+
+Manual helper scripts:
 
 ```bash
 cd server
+./scripts/populate_db.sh
 ./scripts/downgrade_db.sh
 ```
 
-Isso executará os scripts de downgrade na ordem inversa, limpando todas as tabelas e o schema.
+Seeded accounts are documented in [LOGINS.md](LOGINS.md). They are development/coursework credentials only.
 
-**Acessar o PostgreSQL via psql**
+## Available Scripts
 
-```bash
-# Via Docker
-docker exec -it postgres17 bash
-su postgres
-psql
+Frontend scripts in `client/package.json`:
 
-# Ou diretamente
-docker exec -it postgres17 psql -U postgres -d public
-```
+| Script | Purpose |
+| --- | --- |
+| `pnpm dev` | Starts the Next.js development server |
+| `pnpm build` | Builds the Next.js application |
+| `pnpm start` | Starts the production Next.js server |
+| `pnpm lint` | Runs ESLint |
 
-Consulte o arquivo `LOGINS.md` para informações sobre usuários de teste e senhas padrão.
+Backend helper scripts:
 
-**Resumo rápido:**
+| Script | Purpose |
+| --- | --- |
+| `server/scripts/populate_db.sh` | Applies schema assets and synthetic data |
+| `server/scripts/downgrade_db.sh` | Runs downgrade cleanup |
 
-- **Senha padrão**: `senha123` (para todos os usuários internos)
-- **Admin**: `admin@usp.br` / `senha123`
-- **Funcionário**: `funcionario@usp.br` / `senha123`
-- **Interno**: `interno@usp.br` / `senha123`
+## API Surface
 
-**Backend**
+The Flask API is grouped by blueprint:
 
-- `./scripts/populate_db.sh` - Popula o banco de dados
-- `./scripts/downgrade_db.sh` - Reverte/limpa o banco de dados
+- `/auth`: login, registration, session inspection, password updates, registration approvals, external token login.
+- `/admin`: administrative dashboards and CRUD for users, installations, equipment, events, activities, and reservations.
+- `/internal`: internal-user dashboard, activity enrollment, reservations, equipment, and invitations.
+- `/staff`: staff dashboard, activity participant management, reservations, equipment and installation reservation management.
+- `/external`: external invite dashboard and invite accept/reject actions.
+- `/extension_group`: extension group management.
+- `/reports`: analytical report data.
+- `/views`: API access to SQL views.
+- `/debug`: database status, population, and cleanup helpers.
 
-**Frontend**
+See [docs/api.md](docs/api.md) for the route map.
 
-- `pnpm dev` - Inicia servidor de desenvolvimento
-- `pnpm build` - Build de produção
-- `pnpm start` - Inicia servidor de produção
-- `pnpm lint` - Executa o linter
+## Tests
 
-## Project Structure
+No active automated test setup was identified in the current codebase. There are no test scripts in `client/package.json`, no Python test framework configuration, and no test files found during this documentation pass. The client lockfile references `@playwright/test` through dependencies, but no Playwright project setup or script was identified.
 
-```text
-db_project/
-├── client/          # Frontend Next.js
-│   └── Dockerfile.dev  # Dockerfile para desenvolvimento do Next.js
-├── server/          # Backend Flask
-│   ├── app/         # Aplicação Flask (rotas, serviços)
-│   ├── data_generators/  # Geradores de dados sintéticos
-│   ├── docker/      # Configurações Docker do Flask
-│   │   └── Dockerfile  # Dockerfile para o Flask
-│   └── sql/         # Scripts SQL (migrações, views, funções)
-├── docs/            # Documentação do projeto
-└── docker-compose.yml
-```
+## Deployment Status
 
-Additional documentation:
+The repository contains Dockerfiles and Docker Compose configuration, but no CI/CD workflow, cloud hosting configuration, production release process, rollback process, or managed deployment target was identified.
 
-- [`relatorio.md`](relatorio.md) - Relatório técnico completo do projeto (Projeto Final - Bases de Dados)
-- [`LOGINS.md`](LOGINS.md) - Informações sobre logins de teste
-- `docs/` - Documentação técnica e entregas
+Treat the deployment assets as local/containerization support for the archived coursework unless they are revalidated and hardened.
 
-## Architecture
+## Security Notes
 
-**Estrutura do Backend**
+- Flask sessions depend on `FLASK_SECRET_KEY`.
+- API requests use cookies with `credentials: "include"` on the frontend.
+- Role checks are enforced with session-backed decorators in `server/app/services/auth/decorators.py`.
+- External users authenticate through invitation tokens stored in Flask session state.
+- CORS is controlled by `CORS_ORIGINS`.
+- Debug database routes exist under `/debug` and should not be exposed in a real production environment.
+- Seeded credentials in `LOGINS.md` are intentionally weak and must remain local-only.
 
-- `app/routes/` - Rotas da API REST
-- `app/services/` - Lógica de negócio
-- `app/database.py` - Configuração do banco de dados
-- `sql/upgrade_schema.sql` - Schema principal
-- `sql/downgrades/` - Scripts de downgrade
-- `sql/functions/` - Funções SQL
-- `sql/views.sql` - Views do banco
+See [docs/security.md](docs/security.md) for details.
 
-**Estrutura do Frontend**
+## Historical Academic Artifacts
 
-- `app/` - Rotas e páginas (App Router do Next.js)
-- `components/` - Componentes React
-- `hooks/` - Custom hooks
-- `lib/` - Utilitários e configurações
+The repository also contains course deliverables:
+
+- `relatorio.md`: Portuguese academic technical report.
+- `docs/entrega_final/`: final LaTeX/PDF deliverables.
+- `docs/entregas_parciais/`: partial course deliverables.
+- `docs/*.pdf`: original assignment or delivery PDFs.
+
+These files are preserved as historical artifacts. They are not treated as living operational documentation in this refresh.
 
 ## Current Status
 
-This project is archived as a coursework and portfolio reference. The Docker Compose flow, SQL scripts, Flask API, and Next.js frontend remain documented for study and local reproduction.
+This project is archived. The codebase remains useful for studying a full-stack, database-first academic application, but dependencies, Docker assumptions, credentials, debug routes, and deployment behavior should be reviewed before any reuse.
 
-## Known Limitations
+## License
 
-**Erro de conexão com o banco**
-
-- Verifique se o PostgreSQL está rodando: `docker compose ps`
-- Verifique as variáveis de ambiente no `.env`
-- Verifique os logs: `docker compose logs postgres`
-
-**Erro ao popular o banco**
-
-- Verifique se o PostgreSQL está saudável: `docker compose ps`
-- Verifique os logs do Flask: `docker compose logs flask_app`
-- Tente popular manualmente: `./scripts/populate_db.sh`
-
-**Porta já em uso**
-
-- Altere as portas no arquivo `.env` (ex: `FLASK_PORT=5051`, `FLASK_RUN_PORT=5051`, `NEXTJS_PORT=3001`)
-- Ou pare o processo que está usando a porta
-
-**Erro de CORS no desenvolvimento local**
-
-- Certifique-se de que `CORS_ORIGINS` está configurado no `.env` com a URL do frontend (ex: `CORS_ORIGINS=http://localhost:3000`)
-- Verifique se `NEXT_PUBLIC_API_URL` está apontando para a URL correta do backend
+TODO: not identified in the current codebase.
